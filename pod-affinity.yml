@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+
+  template:
+    metadata:
+      labels:
+        app: swiggy
+
+    spec:
+      containers:
+        - name: cont-1
+          image: nginx
+          ports:
+            - containerPort: 80
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - zomato
+              topologyKey: kubernetes.io/hostname
